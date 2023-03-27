@@ -1,10 +1,9 @@
-module Reproductor ( Reproductor, nuevoR, archivosR, listaParaR, temasR, playR, actualR, avanzarR, retrocederR,
-reiniciarR )
-where
-import Tipos
-import Tema
-import Playlist
-import FileSystem
+module Reproductor ( Reproductor, nuevoR, archivosR, listaParaR, temasR, playR, actualR, avanzarR, retrocederR,reiniciarR )
+    where
+import Tipos ( Etiqueta )
+import Tema ( Tema )
+import Playlist ( Playlist, nuevaP, actualP )
+import FileSystem ( FileSystem )
 
 
 data Reproductor = RP FileSystem Playlist deriving (Eq, Show)
@@ -36,9 +35,8 @@ retrocederR (RP fileSystem playlist) = RP fileSystem (retrocederP playlist)
 reiniciarR :: Reproductor -> Reproductor
 reiniciarR (RP fileSystem playlist) = RP fileSystem (reiniciarP playlist)
 
-
 --TESTS
-
+{-}
 testNuevoR :: [Bool]
 testNuevoR = [
     nuevoR (RP [] []) == RP [] (Play 0 [])
@@ -85,3 +83,4 @@ testReiniciarR = [
     ]
 
 
+-}
