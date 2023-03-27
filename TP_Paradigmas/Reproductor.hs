@@ -1,86 +1,92 @@
 module Reproductor ( Reproductor, nuevoR, archivosR, listaParaR, temasR, playR, actualR, avanzarR, retrocederR,reiniciarR )
     where
-import Tipos ( Etiqueta )
-import Tema ( Tema )
-import Playlist ( Playlist, nuevaP, actualP )
-import FileSystem ( FileSystem )
-
+import Tipos
+import Tema 
+import FileSystem 
+import Playlist
 
 data Reproductor = RP FileSystem Playlist deriving (Eq, Show)
 
+
 nuevoR :: FileSystem -> Reproductor
-nuevoR fileSystem = RP fileSystem (nuevaP fileSystem)
+nuevoR fileSystem = RP fileSystem (nuevaP temas)
+  where temas = temasF fileSystem
 
 archivosR :: Reproductor -> FileSystem
 archivosR (RP fileSystem _) = fileSystem
 
 listaParaR :: Etiqueta -> Reproductor -> [Tema]
-listaParaR etiqueta (RP fileSystem playlist) = listaParaP etiqueta fileSystem playlist
+listaParaR etiqueta (RP fileSystem playlist) = filtrarF etiqueta fileSystem
 
 temasR :: FileSystem -> [Tema]
-temasR (RP fileSystem playlist) = temasP playlist
+-- nuestra funcion temasR toma un FileSystem y devuelve una lista de Temas
+temasR = temasF
 
 playR :: Reproductor -> Etiqueta -> Reproductor
-playR (RP fileSystem playlist) etiqueta = RP fileSystem (playP etiqueta playlist)
+playR (RP fileSystem playlist) etiqueta = RP fileSystem (nuevaP (filtrarF etiqueta fileSystem))
 
 actualR :: Reproductor ->Tema
 actualR (RP fileSystem playlist) = actualP playlist
 
 avanzarR :: Reproductor -> Reproductor
-avanzarR (RP fileSystem playlist) = RP fileSystem (avanzarP playlist) 
+avanzarR (RP fileSystem playlist) = RP fileSystem (skipP nuevaPlaylist)
+  where nuevaPlaylist = nuevaP (temasR fileSystem)
 
 retrocederR :: Reproductor -> Reproductor
-retrocederR (RP fileSystem playlist) = RP fileSystem (retrocederP playlist)
+retrocederR (RP fileSystem playlist) = RP fileSystem (backP playlist)
 
 reiniciarR :: Reproductor -> Reproductor
-reiniciarR (RP fileSystem playlist) = RP fileSystem (reiniciarP playlist)
+reiniciarR (RP fileSystem playlist) = RP fileSystem (resetP playlist)
+
 
 --TESTS
-{-}
+
+-- como no tengo constructor de FileSystem, debo declarar variables para poder testear
+fileSystem = nuevoF 
+playlist = nuevaP [nuevoT "La Bamba" "salsa" ]
+
+
 testNuevoR :: [Bool]
 testNuevoR = [
-    nuevoR (RP [] []) == RP [] (Play 0 [])
+    nuevoR fileSystem == RP fileSystem playlist
     ]
 
 testArchivosR :: [Bool]
 testArchivosR = [
-    archivosR (RP ["a", "b", "c"] (Play 0 [])) == ["a", "b", "c"]
+    archivosR (RP fileSystem playlist) == fileSystem
     ]
 
 testListaParaR :: [Bool]
 testListaParaR = [
-    listaParaR "a" (RP ["a", "b", "c"] (Play 0 [])) == ["a", "b", "c"]
+    listaParaR "salsa" (RP fileSystem playlist) == [nuevoT "La Bamba" "salsa" ]
     ]
 
 testTemasR :: [Bool]
 testTemasR = [
-    temasR (RP ["a", "b", "c"] (Play 0 [])) == ["a", "b", "c"]
+    temasR fileSystem == [nuevoT "La Bamba" "salsa" ]
     ]
 
 testPlayR :: [Bool]
 testPlayR = [
-    playR (RP ["a", "b", "c"] (Play 0 [])) "a" == RP ["a", "b", "c"] (Play 0 ["a", "b", "c"])
+    playR (RP fileSystem playlist) "salsa" == RP fileSystem (nuevaP [nuevoT "La Bamba" "salsa" ])
     ]
 
 testActualR :: [Bool]
 testActualR = [
-    actualR (RP ["a", "b", "c"] (Play 0 ["a", "b", "c"])) == "a"
+    actualR (RP fileSystem playlist) == nuevoT "La Bamba" "salsa"
     ]
 
 testAvanzarR :: [Bool]
 testAvanzarR = [
-    avanzarR (RP ["a", "b", "c"] (Play 0 ["a", "b", "c"])) == RP ["a", "b", "c"] (Play 1 ["a", "b", "c"])
+    avanzarR (RP fileSystem playlist) == RP fileSystem (nuevaP [nuevoT "La Bamba" "salsa" ])
     ]
 
 testRetrocederR :: [Bool]
 testRetrocederR = [
-    retrocederR (RP ["a", "b", "c"] (Play 0 ["a", "b", "c"])) == RP ["a", "b", "c"] (Play (-1) ["a", "b", "c"])
+    retrocederR (RP fileSystem playlist) == RP fileSystem (nuevaP [nuevoT "La Bamba" "salsa" ])
     ]
 
 testReiniciarR :: [Bool]
 testReiniciarR = [
-    reiniciarR (RP ["a", "b", "c"] (Play 0 ["a", "b", "c"])) == RP ["a", "b", "c"] (Play 0 ["a", "b", "c"])
+    reiniciarR (RP fileSystem playlist) == RP fileSystem playlist
     ]
-
-
--}

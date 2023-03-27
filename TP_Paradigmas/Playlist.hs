@@ -4,11 +4,11 @@ where
 import Tipos
 import Tema
 
-
 data Playlist = Play Int [ Tema ] deriving (Eq, Show)
 
+
 nuevaP :: [ Tema ] -> Playlist
-nuevaP temas = Play 0 temas
+nuevaP = Play 0 
 
 actualP :: Playlist -> Tema
 actualP (Play index temas) = temas !! index

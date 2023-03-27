@@ -6,7 +6,7 @@ import Tipos
 data Tema = Tem Nombre [ Etiqueta ] Datos deriving (Eq, Show, Ord)
 
 nuevoT :: Nombre -> Datos -> Tema
-nuevoT nombre datos = Tem nombre [] datos
+nuevoT nombre = Tem nombre []
 
 nombreT :: Tema -> Nombre
 -- toma la primera instancia de Tema y devolvemos su valor (como no nos importan los otros campos los marcamos con _ )
@@ -23,6 +23,8 @@ agregarT (Tem nombre etiqueta datos) etiqueta2 = Tem nombre (etiqueta2:etiqueta)
 
 aplicaT :: Etiqueta -> Tema -> Bool
 aplicaT etiqueta2 (Tem _ etiqueta _) = elem etiqueta2 etiqueta
+
+
 
 -- TESTS:
 testNuevoT :: Bool
@@ -41,5 +43,5 @@ testAgregarT :: Bool
 testAgregarT = agregarT (Tem "Bohemian Rhapsody" [] "") "rock" == Tem "Bohemian Rhapsody" ["rock"] ""
 
 testAplicaT :: Bool
-testAplicaT = aplicaT "rock" (Tem "Tema1" ["rock", "clasico"] "") == True
+testAplicaT = aplicaT "rock" (Tem "Tema1" ["rock", "clasico"] "")
 

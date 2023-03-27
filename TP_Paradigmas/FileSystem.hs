@@ -1,9 +1,10 @@
 module FileSystem ( FileSystem, nuevoF, etiquetasF, temasF, agregarF, filtrarF )
     where
-import Tipos
-import Tema 
+import Tema
+import Tipos ( Etiqueta )
 
 data FileSystem = FS [Etiqueta] [Tema] deriving (Eq, Show)
+
 
 nuevoF :: FileSystem
 nuevoF = FS [] []
@@ -18,22 +19,23 @@ agregarF :: Tema -> FileSystem -> FileSystem
 agregarF tema (FS etiquetas temas)  = FS etiquetas (tema:temas)
 
 filtrarF :: Etiqueta -> FileSystem -> [Tema]
-filtrarF etiquetaFiltrar (FS etiqueta tema) = foldr (\x acc -> if aplicaT etiquetaFiltrar x then x:acc else acc) [] tema
+filtrarF etiqueta (FS _ temas) = foldl (\acc tema -> if etiqueta `elem` etiquetasT tema then tema:acc else acc) [] temas
 
 
 
 -- TESTS
-testNuevoF :: [Bool]
+
+testNuevoF :: Bool
 testNuevoF = nuevoF == FS [] []
 
-testEtiquetasF :: [Bool]
-testEtiquetasF = etiquetasF (FS ["rock", "clasico", "pop"] [nuevoT ["rock", "clasico"] "Bohemian Rhapsody" , nuevoT ["pop"] "Shape of You" ]) == ["rock", "clasico", "pop"]
+testEtiquetasF :: Bool
+testEtiquetasF = etiquetasF (FS ["a", "b", "c"] []) == ["a", "b", "c"]
 
-testTemasF :: [Bool]
-testTemasF = temasF (FS ["rock", "clasico", "pop"] [nuevoT ["rock", "clasico"] "Bohemian Rhapsody", nuevoT ["pop"] "Need to Know" ]) == [nuevoT ["rock", "clasico"] "Bohemian Rhapsody", nuevoT ["pop"] "Need to Know" ]
+testTemasF :: Bool
+testTemasF = temasF (FS [] [nuevoT "Stairway to Heaven" "rock"]) == [nuevoT "Stairway to Heaven" "rock"]
 
-testAgregarF :: [Bool]
-testAgregarF = temasF (agregarF (nuevoT ["rock"] "Stairway to Heaven" ) nuevoF) == [nuevoT ["rock"] "Stairway to Heaven" ]
+testAgregarF :: Bool
+testAgregarF = agregarF (nuevoT "Stairway to Heaven" "rock") (FS [] []) == FS [] [nuevoT "Stairway to Heaven" "rock"]
 
-testFiltrarF :: [Bool]
-testFiltrarF = filtrarF "rock" (FS ["rock", "clasico", "pop"] [nuevoT ["rock", "clasico"] "Bohemian Rhapsody", nuevoT ["pop"] "Need to Know" ]) == [nuevoT ["rock", "clasico"] "Bohemian Rhapsody" ])
+testFiltrarF :: Bool
+testFiltrarF = filtrarF "rock" (FS ["pop", "rock", "indie"] [nuevoT "Stairway to Heaven" "rock"]) == [nuevoT "Stairway to Heaven" "rock"]
