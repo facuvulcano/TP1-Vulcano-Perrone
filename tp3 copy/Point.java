@@ -30,11 +30,13 @@ public class Point {
 		return pc;
 	}
 	
-	public List<Object> point_array() {
-		List<Object> listaDePuntos = new ArrayList<>();
-		return listaDePuntos;
-		
+	public List<Integer> point_array() {
+	    List<Integer> listaDePuntos = new ArrayList<>(2);
+	    listaDePuntos.add(this.i);
+	    listaDePuntos.add(this.j);
+	    return listaDePuntos;
 	}
+
 	
 	
 }
