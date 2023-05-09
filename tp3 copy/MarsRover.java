@@ -12,37 +12,32 @@ public class MarsRover{
 		
 	}
 
-	public  List<Object> move(String string) {
-		if (string == "f") {
-			for (int i = 0; i < position.point_array().size(); i++) {
-			 
-			
-				if (isHeadingNorth()) {
-					
-					position.point_array().set(0, ((Integer)position.point_array().get(0)).intValue() + 1);
-				
-				}
-				/*
-		
-				if (isHeadingSouth()) {
-				
-				}
-				if (isHeadingEast()) {
-				
-				}
-				if (isHeadingWest()) {
-				
-				}*/
-			
-			}
-		}
-		
-		
-		
-		return position.point_array();
+	public List<Integer> move(String string) {
+	    if (string.equals("f") && isHeadingNorth()) {
+	        position.i++;
+	    }
+	    
+	    if (string.equals("f") && isHeadingSouth()) {
+	        position.i--;
+	    }
+	    
+	    if (string.equals("f") && isHeadingWest()) {
+	        position.j--;
+	    }
+	    
+	    if (string.equals("f") && isHeadingEast()) {
+	        position.j++;
+	    }
+	    
+	    
+	    
+	    
+	 
+	    return position.point_array();
 	}
 
-	public List<Object> getPosition() {
+
+	public List<Integer> getPosition() {
 		return position.point_array();
 	}
 
