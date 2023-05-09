@@ -20,41 +20,22 @@ public class MarsRover{
 	       
 	    }
 		
-	    if (string.equals("f") && isHeadingNorth()) {
+	    if (string.equals("f") && isHeadingNorth() || string.equals("b") && isHeadingSouth()) {
 	        position.i++;
 	    }
 	    
-	    if (string.equals("f") && isHeadingSouth()) {
+	    if (string.equals("f") && isHeadingSouth() || string.equals("b") && isHeadingNorth()) {
 	        position.i--;
 	    }
 	    
-	    if (string.equals("f") && isHeadingWest()) {
+	    if (string.equals("f") && isHeadingWest() || string.equals("b") && isHeadingEast()) {
 	        position.j--;
 	    }
 	    
-	    if (string.equals("f") && isHeadingEast()) {
+	    if (string.equals("f") && isHeadingEast() || string.equals("b") && isHeadingWest()) {
 	        position.j++;
 	    }
-	    
-	    if (string.equals("b") && isHeadingNorth()) {
-	        position.i--;
-	    }
-	    
-	    if (string.equals("b") && isHeadingSouth()) {
-	        position.i++;
-	    }
-	    
-	    if (string.equals("b") && isHeadingWest()) {
-	        position.j++;
-	    }
-	    
-	    if (string.equals("b") && isHeadingEast()) {
-	        position.j--;
-	    }
-	    
-	    
-	    
-	 
+	       
 	    return position.point_array();
 	}
 
